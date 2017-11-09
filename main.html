@@ -1,0 +1,400 @@
+<html>
+	<head> 
+               <title>Welcome to My Data House</title>
+
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css" type="text/css" rel="stylesheet" />
+		<link href="https://seller.imimg.com/css-new/contactbook-v-36.css" type="text/css" rel="stylesheet" />
+		<script language="javascript" type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script> 
+		<script src="https://code.jquery.com/ui/1.7.1/jquery-ui.js"></script>
+		<link rel="stylesheet" href="http://code.jquery.com/ui/1.7.1/themes/base/jquery-ui.css">		
+
+
+	<style>
+			.overlay_s {background:#fff;position: fixed;opacity:.75;filter:alpha(opacity=50);-ms-filter: alpha(Opacity=50);top:0;bottom:0;left:0;right:0}
+			#filter_div{box-sizing:border-box;position:relative;position:fixed;background:#fff;z-index:10;left:50%;margin-left:-10%;top:10%;
+			border-top-left-radius:7px;border-top-right-radius:7px;box-shadow: 0 		4px 16px rgba(0,0,0,0.2);}	
+					
+			.chat_bxx{min-width:30%;max-width:50%;margin:5px 10px 0 10px}.cb{clear:both}.chatbox-ot{margin:10px 0;display:block;float:left;width:100%;}
+			.contact-sent,.chat_adbook{min-width:100%;max-width:100%;box-sizing:border-box}
+			.chattbl tr{border:1px solid #efefef;background:#eff6fc;margin-top:10px;}.chattbl tr:hover{background:#efefef;}.chattbl{margin-top:10px;}.chatMain
+			{margin-top:10px;}
+			.chat_adbook{background:#caedeb!important;color:#000!important;box-shadow:inherit!important}
+			#calender_div ul li{background-color:#f5f5f5;padding:5px;margin-bottom: 5px;}#calender_div ul li:hover,#calender_div ul li.active
+			{background-color:#00a699;color:#fff}
+			.customfrom,.customto{background:#fff;padding:2px 10px;float:left;border:1px solid #ededed;}.cst_date{width:100%;float:left;margin-bottom:10px}
+			#custom_div{float:left;padding:10px;background:#eff6fc;position:absolute;bottom:15px;right:247px;width:179px;}
+div.scroll {
+    width: 1000px;
+    height: 1000px;
+    overflow: scroll;
+}
+		
+		</style>
+
+	<script>
+//code for left list
+$(document).ready(function(){
+		
+		$.ajax({
+			url:'http://localhost/final/list.php',
+			method: 'post',
+			dataType: 'json',
+			success: function (data) 
+				{
+					     content = '';
+						val='';
+						$.each(data, function(key,value)
+					{
+//						alert(value.pat_name);
+					//val=value.pat_name
+						content += '<li id=list-'+key +' onclick=get_deatils("'+value.pat_name+'");>';
+						content += '<a href=javascript:void(0); class=tabopen tab-id=1 ripple=ripple ripple-color=#FFF>';
+						content += '<table cellpadding=0 cellspacing=0 width=100% id=bheri_tbl>';
+						content += '<tbody>';
+
+						content += '<tr>';
+						content +='<td width=100%>';
+						content += '<div class=mailList>';
+						content += '<div class=userContent>';
+						content += '<h1>'+value.pat_name+'</h1>';
+						content += '<p>'+value.disease+'</p>';
+						/*content += '</div>';
+						content += '<div class=location>';
+						content += '<p>'+value.last_visit+'</p>';
+						content += '</div>';
+						*/content += '</div>';
+						content += '</td>';
+						content += '</tr>';
+						content +='</tbody>';
+						content +='</table>';
+						content +='</a>'
+						content +='</li>' 
+						});
+					$('#fetch_list').html(content);
+				}
+			});
+			});
+//code for left list
+
+	function get_deatils(id)
+	{	
+		var obj ={};
+		obj.p_name=id;	
+
+		$.ajax({
+			type: "POST",
+			url:'http://localhost/final/detail.php',
+			data: JSON.stringify(obj),
+			dataType: 'json',
+			success: function (data) 
+				{
+					content = '';
+					$.each(data, function(key,value)
+					{
+						content += '<li>';
+						content += '<div >';
+						content += '<table class=chattbl width=100%>';
+						content += '<tbody> ';
+						content += '<tr>';
+						content += '<td width=100%>';
+						content += '<div>';
+						content += '<h1>'+value.disease+'</h1>';
+						content += '<p>'+value.pat_mobile+'</p>';
+						content += '</div>';
+						content += '<div>';
+						content += '<p>'+value.pat_address+'</p>';
+						content += '</div>';
+						content += '</td>';
+						content += '</tr>';
+						content += '</tbody>';
+						content += '</table>';
+						content += '</div>';
+//						content += '<div>';
+
+						content += '<table style=width:100%; class=chattbl>';
+						content += '<tbody>';
+						content += '<tr>';
+						content += '<td>'+value.pat_video+'</td>';
+						content += '</tr>';
+						content += '</tbody>';
+						content += '</table>';
+//						content += '</div>';
+
+						content += '<div>';
+						content += '<table style=width:100%; class=chattbl>';
+						content += '<tbody>';
+						content += '<tr>';
+						content += '<td>'+value.pat_pics+'</td>';
+						content += '</tr>';
+						content += '</tbody>';
+						content += '</table>';
+						content += '</div>';
+						content += '</div>';
+						content +='</li>' ;
+
+					});
+//alert(content);
+					$('#fetch_details').html(content);
+				}
+			});
+}//get_deatils()
+
+		function addPatient()  //show pop-up
+		{
+			document.getElementById("contactPopUp").style.display="block";
+		}
+
+
+		function submit_pat_details() //store input
+		{
+							alert('welocme pop up');
+			var obj ={};
+			obj.p_name=document.getElementById("p_name").value;
+			obj.p_mobile=document.getElementById("p_mobile").value;
+			obj.p_address=document.getElementById("p_address").value;
+			obj.disaese=document.getElementById("disaese").value;
+			obj.prescription=document.getElementById("prescription").value;
+			obj.userData=document.getElementById("userData").value;
+			obj.fileToUpload=document.getElementById("fileToUpload").src;
+			obj.videoToUpload=document.getElementById("videoToUpload").src;
+
+			$.ajax({
+				type: "POST",
+				url:'http://localhost/final/insert.php',
+				data: JSON.stringify(obj),
+				dataType: 'json',
+				success: function () 
+					{
+						   alert('success');
+					},
+				error : function ()
+					{
+						alert('error has been occured');
+					}
+				});
+			$('#contactPopUp').hide();
+		}//submit_pat_details END
+		
+		function renderList()
+		{
+		}
+
+//serach code
+
+$(document).ready(function(){
+$( "#searchauto" ).keypress(function(event) {
+  if ( event.keyCode == 13 ) {
+var name=document.getElementById("searchauto").value;
+		$.ajax({
+			url:'http://localhost/final/search.php',
+			data: { 
+				search_name : name
+	    		      },
+			method: 'post',
+			dataType: 'json',
+			success: function (data) 
+				{
+					     content = '';
+						$.each(data, function(key,value)
+					{
+						content += '<li id=list-'+key +' onclick=patient_details();>';
+						content += '<a href=javascript:void(0); class=tabopen tab-id=1 ripple=ripple ripple-color=#FFF>';
+						content += '<table cellpadding=0 cellspacing=0 width=100% id=bheri_tbl>';
+						content += '<tbody>';
+
+						content += '<tr>';
+						content +='<td width=100%>';
+						content += '<div class=mailList>';
+						content += '<div class=userContent>';
+						content += '<h1>'+value.pat_name+'</h1>';
+						content += '<p>'+value.disease+'</p>';
+						content += '</div>';
+					/*	content += '<div class=location>';
+						content += '<p>'+value.mobile+'</p>';
+						content += '</div>';
+					*/	content += '</div>';
+						content += '</td>';
+						content += '</tr>';
+						content +='</tbody>';
+						content +='</table>';
+						content +='</a>'
+						content +='</li>' 
+						});
+					$('#fetch_list').html(content);
+				}
+			});
+  }
+});
+});
+
+	</script>
+	</head>	
+<body>
+<div  style="display:none; z-index: 20000; position: fixed; top: 20%; left: 20%; width: 650px; border: 2px solid black; padding: 35px; background-color: white;box-shadow: 4px 4px 20px black; border-radius:10px;" id="contactPopUp">
+
+	    <table style="width:100%">
+
+		      <tr>
+			    <td width="40%"><label for="contName">Patient Name</label></td>
+			    <td><input type="text" name="name" placeholder="Patient Name" id="p_name" size="30"></td>
+	      	      </tr>
+
+		       <tr>
+		       		<td><label for="contactNum">Patient Mobile</label></td>
+		       		<td><input type="text" name="contactNum" placeholder="Patient Mobile" id="p_mobile" size="30"></td>
+		       </tr>
+
+		       <tr>
+		       		<td><label for="contactNum">Patient Adress</label></td>
+		       		<td><input type="text" name="contactNum" placeholder="Patient Adress" id="p_address" size="30"></td>
+		       </tr>
+
+
+		       <tr>
+		       		<td><label for="contactNum">Disease</label></td>
+		       		<td><input type="text" name="contactNum" placeholder="Disease" id="disaese" size="30"></td>
+		       </tr>
+
+		       <tr>
+		       		<td><label for="typeNum">Prescription</label></td>
+		       		<td><input type="text" name="typeNum" placeholder="Prescription" id="prescription" size="30"></td>
+		       </tr>
+
+	      	       <tr>
+				<td style="vertical-align: top;"><label for="addField">Data</label></td>
+				<td><textarea name="address" placeholder="enter data here..." id="userData" rows="5" cols="30" placeholder="Enter Address"></textarea></td>
+	      		</tr>
+
+			<tr>
+				<td><label for="typeNum">Upload Pics</label></td>
+				<td >
+					<input type="file" name="fileToUpload" id="fileToUpload" multiple>
+				</td>
+	      		</tr>
+
+			<tr>
+					<td><label for="typeNum">Upload videos</label></td>
+					<td>
+						<input type="file" name="videoToUpload" id="videoToUpload" >
+					</td>
+		      	</tr>
+
+
+	      		<tr>
+				<td colspan="2" style="text-align:center">
+	  			<input type="button" name="submit" value="Submit" onclick="submit_pat_details();">
+				</td>
+	      		</tr>
+
+
+		    </table>
+  </div>
+
+
+
+
+
+
+	<div class="container" style="min-height:843px;">  
+		<div class="tabs_add" id="ab_listing" >
+
+			<div class="tabLeft">
+				<div class="adbk_title">
+					<h4>Users list</h4>
+				</div>
+
+			<div class="addUser " onclick="addPatient();"><i class="fa fa-user-plus" id="step1" style="color:#00a699;font-size:33px;"></i>
+			</div>
+
+
+			<div class="filter">
+				<div class="filterLeft"><i class="fa fa-search" aria-hidden="true"></i></div>
+					<div class="filterSerch" style="position:relative" id="step2">
+						<i class="fa fa-search" aria-hidden="true" style="position: absolute;top: 12px;left: 9px;"></i>
+						<input id="searchauto" type="text" name="text" placeholder="Search by Name or Disease..." class="ui-autocomplete-input" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true">
+						<input id="searchclick" type="hidden" name="searchclick" value="">
+					<div class="f2 srh_cross" style="cursor: pointer;" id="crosssearch" onclick="cross(10359580);"><i class="fa fa-times-circle" aria-hidden="true" 
+						style="font-size:15px">
+						</i>
+					</div>
+				</div>
+			</div>
+
+			<div id="left_list"> 
+
+				<div class="tabs-header" id="left_ad_listng" onscroll="renderList();" style="height: 730px;"> 
+					<ul id="fetch_list"> 
+					</ul>
+				</div>
+			</div>
+
+</div>
+		<div id="address_book_enq_detail" style="display: block; min-height: 843px;">
+			<div class="tabs-content" id="testing" style="">
+				<div tab-id="1" class="tab active">
+					<div class="rightTitle">DR Murali's data<a class="starUser">
+						<i class="fa fa-pencil-square-o" aria-hidden="true" style="color:#00a699;margin-top:7px;font-size:25px" onclick="showedit
+							('IN');" id="edit_contact"></i></a>			
+					</div> 
+				</div>
+			<div id="edit_adbook" style="display: none;">
+				<div id="timeline" class="edit_pop_heading">Edit Contact Details
+				</div>
+			</div>
+			<div id="enqdet">
+				<div style="width:100%;float:left;    margin-top: 15px;" class="tabbb">
+					<span id="my_enq" onclick="$('#myenqtab').show();$('#myconvtab').hide();$('#my_enq').addClass('active');trackEvent
+						('addressbook', 'myEnquiries');" class="active">Past Interactions</span>
+					<p style="width:100%;border-bottom: 2px solid #efefef;height:2px;margin-top: 35px;"></p>
+				</div>
+<!--bheri-->
+
+<div>
+	<table style="width:100%;" class="chattbl">
+		<tbody>
+			<tr><td calss="pat_name">Hari BHeri</td></tr>
+		</tbody>
+	</table>
+</div>
+
+<div>
+
+	<table style="width:100%;" class="chattbl">
+		<tbody>
+			<tr class="table-row bo_m2 cp" >   
+				<td class="td_sub">
+					<table class="chattbl_in">
+						<tbody>
+							<tr>
+								<td class="first_date">February 26, 2017</td>
+							</tr>
+							<tr>
+								<td class="td_sub">Came for Hairfall</td>
+							</tr> 
+						</tbody>
+					</table>
+				</td>  
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+<div>
+
+<div>
+
+<div class="tabs-header" id="left_ad_listng" onscroll="renderList();" style="height: 730px;"> 
+	<ul id="fetch_details"> 
+	</ul>
+</div>
+
+</div>
+
+<!--bheri-->
+		</div>
+		</div>
+	</div>
+</div>
+</div>
+</body>
+</html>		
