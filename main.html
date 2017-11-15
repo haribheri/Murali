@@ -47,7 +47,8 @@ $(document).ready(function(){
 					{
 //						alert(value.pat_name);
 					//val=value.pat_name
-						content += '<li id=list-'+key +' onclick=get_deatils("'+value.pat_name+'");>';
+						//content += '<li id=list-'+key +' onclick=get_deatils("'+value.pat_name+'");>';
+						content += '<li id=list-'+key +' onclick=get_deatils("'+value.pid+'");>';
 						content += '<a href=javascript:void(0); class=tabopen tab-id=1 ripple=ripple ripple-color=#FFF>';
 						content += '<table cellpadding=0 cellspacing=0 width=100% id=bheri_tbl>';
 						content += '<tbody>';
@@ -58,11 +59,21 @@ $(document).ready(function(){
 						content += '<div class=userContent>';
 						content += '<h1>'+value.pat_name+'</h1>';
 						content += '<p>'+value.disease+'</p>';
+			
+						content += '</div>';
+						content += '<div id=pid  style="display: none;">';
+						content += '<p>'+value.pid+'</p>';
+						content += '</div>';
+		
+						content += '</div>';
+
 						/*content += '</div>';
 						content += '<div class=location>';
 						content += '<p>'+value.last_visit+'</p>';
 						content += '</div>';
-						*/content += '</div>';
+						*/
+
+
 						content += '</td>';
 						content += '</tr>';
 						content +='</tbody>';
@@ -79,8 +90,8 @@ $(document).ready(function(){
 	function get_deatils(id)
 	{	
 		var obj ={};
-		obj.p_name=id;	
-
+		obj.pid=id;	
+		//alert("value is "+obj.pid);
 		$.ajax({
 			type: "POST",
 			url:'http://localhost/final/detail.php',
@@ -92,43 +103,45 @@ $(document).ready(function(){
 					$.each(data, function(key,value)
 					{
 						content += '<li>';
-						content += '<div >';
-						content += '<table class=chattbl width=100%>';
-						content += '<tbody> ';
-						content += '<tr>';
-						content += '<td width=100%>';
-						content += '<div>';
-						content += '<h1>'+value.disease+'</h1>';
-						content += '<p>'+value.pat_mobile+'</p>';
-						content += '</div>';
-						content += '<div>';
-						content += '<p>'+value.pat_address+'</p>';
-						content += '</div>';
-						content += '</td>';
-						content += '</tr>';
-						content += '</tbody>';
-						content += '</table>';
-						content += '</div>';
-//						content += '<div>';
+						if(typeof value.disease!= 'undefined')						
+						{
+	
+							content += '<div >';
+								content += '<table class=chattbl width=100%>';
+								content += '<tbody> ';
+									content += '<tr>';
+										content += '<td width=100%>';
+											content += '<div>';
+												content += '<h4>'+value.disease+'</h4>';
+												content += '<p>'+value.pat_mobile+'</p>';
+											content += '</div>';
+											content += '<div>';
+												content += '<p>'+value.pat_address+'</p>';
+											content += '</div>';
+										content += '</td>';
+									content += '</tr>';
+								content += '</tbody>';
+							content += '</table>';
+							content += '</div>';
+//							content += '<div>';
+						}
 
-						content += '<table style=width:100%; class=chattbl>';
-						content += '<tbody>';
-						content += '<tr>';
-						content += '<td>'+value.pat_video+'</td>';
-						content += '</tr>';
-						content += '</tbody>';
-						content += '</table>';
+						if(typeof value.url!= 'undefined')						
+						{						
+
+							content += '<table style=width:100%; class=chattbl>';
+							content += '<tbody>';
+							content += '<tr>';
+							content += '<td>';
+							content	+= '<img src='+value.url+'>';
+//							content	+= '<p>'+value.url+'</p>';
+							content	+= '</td>';
+							content += '</tr>';
+							content += '</tbody>';
+							content += '</table>';
+						}
 //						content += '</div>';
-
-						content += '<div>';
-						content += '<table style=width:100%; class=chattbl>';
-						content += '<tbody>';
-						content += '<tr>';
-						content += '<td>'+value.pat_pics+'</td>';
-						content += '</tr>';
-						content += '</tbody>';
-						content += '</table>';
-						content += '</div>';
+						
 						content += '</div>';
 						content +='</li>' ;
 
@@ -145,9 +158,9 @@ $(document).ready(function(){
 		}
 
 
-		function submit_pat_details() //store input
+		function submit_pat_details(e) //store input
 		{
-							alert('welocme pop up');
+
 			var obj ={};
 			obj.p_name=document.getElementById("p_name").value;
 			obj.p_mobile=document.getElementById("p_mobile").value;
@@ -156,31 +169,53 @@ $(document).ready(function(){
 			obj.prescription=document.getElementById("prescription").value;
 			obj.userData=document.getElementById("userData").value;
 			obj.fileToUpload=document.getElementById("fileToUpload").src;
-			obj.videoToUpload=document.getElementById("videoToUpload").src;
-
+//			obj.videoToUpload=document.getElementById("videoToUpload").src;
 			$.ajax({
 				type: "POST",
-				url:'http://localhost/final/insert.php',
-				data: JSON.stringify(obj),
-				dataType: 'json',
-				success: function () 
+				url:'insert.php',
+				data: new FormData($('#submit_form1')),
+				    cache:false,
+				    contentType: false,
+				    processData: false,
+				success: function (data) 
 					{
-						   alert('success');
+						//   alert("success"+data);
 					},
-				error : function ()
+				error : function (data)
 					{
-						alert('error has been occured');
+						//alert("fail"+data);
 					}
 				});
 			$('#contactPopUp').hide();
+return false;
 		}//submit_pat_details END
 		
 		function renderList()
 		{
 		}
 
-//serach code
 
+
+$(document).ready(function (e){
+$("#uploadForm").on('submit',(function(e){
+e.preventDefault();
+$.ajax({
+url: "insert.php",
+type: "POST",
+data:  new FormData(this),
+contentType: false,
+cache: false,
+processData:false,
+success: function(data){
+//alert(data);
+},
+error: function(){} 	        
+});
+$('#contactPopUp').hide();
+}));
+});
+
+//serach code
 $(document).ready(function(){
 $( "#searchauto" ).keypress(function(event) {
   if ( event.keyCode == 13 ) {
@@ -197,7 +232,7 @@ var name=document.getElementById("searchauto").value;
 					     content = '';
 						$.each(data, function(key,value)
 					{
-						content += '<li id=list-'+key +' onclick=patient_details();>';
+						content += '<li id=list-'+key +' onclick=get_deatils("'+value.pid+'");>';
 						content += '<a href=javascript:void(0); class=tabopen tab-id=1 ripple=ripple ripple-color=#FFF>';
 						content += '<table cellpadding=0 cellspacing=0 width=100% id=bheri_tbl>';
 						content += '<tbody>';
@@ -212,7 +247,12 @@ var name=document.getElementById("searchauto").value;
 					/*	content += '<div class=location>';
 						content += '<p>'+value.mobile+'</p>';
 						content += '</div>';
-					*/	content += '</div>';
+					*/
+						content += '</div>';
+						content += '<div id=pid  style="display: none;">';
+						content += '<p>'+value.pid+'</p>';
+						content += '</div>';
+						content += '</div>';
 						content += '</td>';
 						content += '</tr>';
 						content +='</tbody>';
@@ -230,70 +270,67 @@ var name=document.getElementById("searchauto").value;
 	</script>
 	</head>	
 <body>
-<div  style="display:none; z-index: 20000; position: fixed; top: 20%; left: 20%; width: 650px; border: 2px solid black; padding: 35px; background-color: white;box-shadow: 4px 4px 20px black; border-radius:10px;" id="contactPopUp">
 
+<div  style="display:none; z-index: 20000; position: fixed; top: 20%; left: 20%; width: 650px; border: 2px solid black; padding: 35px; background-color: white;box-shadow: 4px 4px 20px black; border-radius:10px;" id="contactPopUp">
+					<form action="insert.php" method="post" id="uploadForm" enctype="multipart/form-data">
 	    <table style="width:100%">
 
 		      <tr>
-			    <td width="40%"><label for="contName">Patient Name</label></td>
-			    <td><input type="text" name="name" placeholder="Patient Name" id="p_name" size="30"></td>
+			    <td><h1>Patient Name</h1></td>
+			    <td ><input type="text" name="p_name" placeholder="Patient Name" id="p_name" size="30"></td>
 	      	      </tr>
 
 		       <tr>
 		       		<td><label for="contactNum">Patient Mobile</label></td>
-		       		<td><input type="text" name="contactNum" placeholder="Patient Mobile" id="p_mobile" size="30"></td>
+		       		<td><input type="text" name="p_mobile" placeholder="Patient Mobile" id="p_mobile" size="30"></td>
 		       </tr>
 
 		       <tr>
 		       		<td><label for="contactNum">Patient Adress</label></td>
-		       		<td><input type="text" name="contactNum" placeholder="Patient Adress" id="p_address" size="30"></td>
+		       		<td><input type="text" name="p_address" placeholder="Patient Adress" id="p_address" size="30"></td>
 		       </tr>
 
 
 		       <tr>
 		       		<td><label for="contactNum">Disease</label></td>
-		       		<td><input type="text" name="contactNum" placeholder="Disease" id="disaese" size="30"></td>
+		       		<td><input type="text" name="disaese" placeholder="Disease" id="disaese" size="30"></td>
 		       </tr>
 
 		       <tr>
 		       		<td><label for="typeNum">Prescription</label></td>
-		       		<td><input type="text" name="typeNum" placeholder="Prescription" id="prescription" size="30"></td>
+		       		<td><input type="text" name="prescription" placeholder="Prescription" id="prescription" size="30"></td>
 		       </tr>
 
 	      	       <tr>
 				<td style="vertical-align: top;"><label for="addField">Data</label></td>
-				<td><textarea name="address" placeholder="enter data here..." id="userData" rows="5" cols="30" placeholder="Enter Address"></textarea></td>
+				<td><textarea name="userData" placeholder="enter data here..." id="userData" rows="5" cols="30" placeholder="Enter Address"></textarea></td>
 	      		</tr>
 
 			<tr>
-				<td><label for="typeNum">Upload Pics</label></td>
+				<td style="text-align:left;padding:5px 5px 0 5px"></td>
+			</tr>
+			<tr>
+				<td><label for="typeNum">Upload imgage/video </label></td>
 				<td >
-					<input type="file" name="fileToUpload" id="fileToUpload" multiple>
+					<input type="file" name="fileToUpload[]" id="fileToUpload" multiple>
 				</td>
 	      		</tr>
 
-			<tr>
-					<td><label for="typeNum">Upload videos</label></td>
-					<td>
-						<input type="file" name="videoToUpload" id="videoToUpload" >
-					</td>
-		      	</tr>
 
-
+			<div>
 	      		<tr>
-				<td colspan="2" style="text-align:center">
-	  			<input type="button" name="submit" value="Submit" onclick="submit_pat_details();">
+				<td style="text-align:center;" colspan="2">
+				<input type="submit" name="submit" class="cont_now_btn" value="Submit" style="margin-top:4px">
 				</td>
 	      		</tr>
 
+
+			</div>
 
 		    </table>
+
+					</form>
   </div>
-
-
-
-
-
 
 	<div class="container" style="min-height:843px;">  
 		<div class="tabs_add" id="ab_listing" >
