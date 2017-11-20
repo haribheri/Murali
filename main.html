@@ -10,6 +10,12 @@
 
 
 	<style>
+.drive_bx{width:200px;height:220px;margin:10px 14px 10px 10px;text-align:center;    -webkit-box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);-moz-box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);position:relative;display: inline-block;}
+.drive_bx:hover{-webkit-box-shadow:  0 2px 11px 6px rgba(66, 133, 244,0.5), 0 3px 1px -2px rgba(66, 133, 244,0.5), 0 1px 5px 0 rgba(66, 133, 244,0.5);box-shadow: 0 2px 11px 6px rgba(66, 133, 244,0.5), 0 3px 1px -2px rgba(66, 133, 244,0.5), 0 1px 5px 0 rgba(66, 133, 244,0.5);-moz-box-shadow: 0 2px 11px 6px rgba(66, 133, 244,0.5), 0 3px 1px -2px rgba(66, 133, 244,0.5), 0 1px 5px 0 rgba(66, 133, 244,0.5);}
+.drive_bx .fa{font-size:60px;padding:55px;} .drive_bx .pdf_d{color:#da2931}  .drive_bx .img{color:#00c0ef} .drive_bx .filet{color:#00a65a}
+.drive_flname{height:50px;background:#efefef;width:100%;padding:0 5px;position:absolute;bottom:0;} .doc_nme{font-weight:500;display:block; margin-top:8px;overflow: hidden;height:15px;} .docs_date{color:#7d7d7d;font-size:12px;display:block;margin-top:7px}
+/*.dcnm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-block;width:70%} */
+
 			.overlay_s {background:#fff;position: fixed;opacity:.75;filter:alpha(opacity=50);-ms-filter: alpha(Opacity=50);top:0;bottom:0;left:0;right:0}
 			#filter_div{box-sizing:border-box;position:relative;position:fixed;background:#fff;z-index:10;left:50%;margin-left:-10%;top:10%;
 			border-top-left-radius:7px;border-top-right-radius:7px;box-shadow: 0 		4px 16px rgba(0,0,0,0.2);}	
@@ -28,7 +34,39 @@ div.scroll {
     height: 1000px;
     overflow: scroll;
 }
-		
+	
+.txtbx{
+    width: 348px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    background: white;
+    float: left;
+    font-size: 14px;
+}
+	
+.tabLeft {
+    float: left;
+    position: fixed;
+    width: 400px;
+    background: #fff;
+    border: 1px solid #efefef;
+    padding: 5px;
+}
+.textarea {
+    min-height: 100px;
+    height: 100px;
+    padding: 5px;
+    resize: none;
+    width: 348px;
+}
+
+
+#address_book_enq_detail {
+    width: calc(100% - 420px);
+}
+
+
+
 		</style>
 
 	<script>
@@ -99,24 +137,61 @@ $(document).ready(function(){
 			dataType: 'json',
 			success: function (data) 
 				{
+
+					content1= '';
+					$.each(data, function(key,value)
+					{
+						if(typeof value.pat_name!= 'undefined')						
+						{
+						content1 += '<div>';
+							content1 +='<table style=width:100%; class=chattbl>';
+								content1 += '<tbody>';
+									content1 +='<tr><td calss=pat_name>'+value.pat_name+'</td></tr>';
+								content1 +='</tbody>';	
+							content1 +='</table>';
+						content1 +='</div>';
+						content1 +='<div>';
+							content1 +='<table style=width:100%; class=chattbl>';
+								content1 +='<tbody>';
+									content1 +='<tr class=table-row bo_m2 cp>';
+										content1 +='<td class=td_sub>';
+											content1 +='<table class=chattbl_in>';
+												content1 +='<tbody>';
+													content1 +='<tr>';
+													content1 +='<td> Last visited on : '+value.latest_visit+'</td>';
+													content1 +='</tr>';
+													content1 +='<tr>';
+														content1 +='<td>Came for : '+value.disease+'</td>';
+													content1 +='</tr>';
+												content1 +='</tbody>';
+											content1 +='</table>';
+										content1 +='</td>';
+									content1 +='</tr>';
+								content1 +='</tbody>';
+							content1 +='</table>'
+						content1 +='</div>';
+						}
+					});
+					$('#fetch_header').html(content1);
+
 					content = '';
 					$.each(data, function(key,value)
 					{
-						content += '<li>';
+						
 						if(typeof value.disease!= 'undefined')						
 						{
-	
+							content += '<li>';
 							content += '<div >';
 								content += '<table class=chattbl width=100%>';
 								content += '<tbody> ';
 									content += '<tr>';
 										content += '<td width=100%>';
 											content += '<div>';
-												content += '<h4>'+value.disease+'</h4>';
-												content += '<p>'+value.pat_mobile+'</p>';
+											content += '<h4>'+value.disease+'</h4>';
+											content += '<p>'+value.pat_mobile+'</p>';
 											content += '</div>';
 											content += '<div>';
-												content += '<p>'+value.pat_address+'</p>';
+											content += '<p>'+value.pat_address+'</p>';
 											content += '</div>';
 										content += '</td>';
 									content += '</tr>';
@@ -129,21 +204,22 @@ $(document).ready(function(){
 						if(typeof value.url!= 'undefined')						
 						{						
 
-							content += '<table style=width:100%; class=chattbl>';
-							content += '<tbody>';
-							content += '<tr>';
-							content += '<td>';
-							content	+= '<img src='+value.url+'>';
-//							content	+= '<p>'+value.url+'</p>';
-							content	+= '</td>';
-							content += '</tr>';
-							content += '</tbody>';
-							content += '</table>';
+							//content += '<table style=width:100%; class=chattbl>';
+							//content += '<tbody>';
+//							content += '<tr>';
+							//content += '<td>';
+								content +='<div class=drive_bx onclick=openImg("'+value.url+'");>';
+//							content	+= '<img src='+value.url+' style=border-radius: 8px;>';
+								content +='</div>';
+							//content	+= '</td>';
+//							content += '</tr>';
+							//content += '</tbody>';
+							//content += '</table>';
 						}
 //						content += '</div>';
 						
 						content += '</div>';
-						content +='</li>' ;
+						//content +='</li>' ;
 
 					});
 //alert(content);
@@ -151,6 +227,13 @@ $(document).ready(function(){
 				}
 			});
 }//get_deatils()
+
+
+function openImg(id)
+{
+window.open(id);
+//alert(id);
+}
 
 		function addPatient()  //show pop-up
 		{
@@ -219,7 +302,9 @@ $('#contactPopUp').hide();
 $(document).ready(function(){
 $( "#searchauto" ).keypress(function(event) {
   if ( event.keyCode == 13 ) {
+console.log('hello');
 var name=document.getElementById("searchauto").value;
+//alert(name);
 		$.ajax({
 			url:'http://localhost/final/search.php',
 			data: { 
@@ -266,6 +351,34 @@ var name=document.getElementById("searchauto").value;
   }
 });
 });
+ $( function() {
+                                  $(".start_datepick").datepicker(
+                                     {
+                                          maxDate: '0',
+                                          altFormat: 'yy,mm,dd', 
+                                          altField: '#alt-start-date',
+                                          dateFormat: 'dd-M-yy',
+                                          beforeShow : function()
+                                          {
+                                              if(jQuery('.end_datepick').val().length > 0){
+                                                  jQuery( this ).datepicker('option','maxDate', jQuery('.end_datepick').val());
+                                              }
+                                          }
+                                      }
+                                  );
+                                  $(".end_datepick").datepicker(
+                                     {
+                                          maxDate: '0',
+                                          altFormat: 'yy,mm,dd', 
+                                          altField: '#alt-end-date',
+                                          dateFormat: 'dd-M-yy',
+                                          beforeShow : function()
+                                          {
+                                              jQuery( this ).datepicker('option','minDate', jQuery('.start_datepick').val());
+                                          } 
+                                      }
+                                  );
+                                } );
 
 	</script>
 	</head>	
@@ -277,33 +390,33 @@ var name=document.getElementById("searchauto").value;
 
 		      <tr>
 			    <td><h1>Patient Name</h1></td>
-			    <td ><input type="text" name="p_name" placeholder="Patient Name" id="p_name" size="30"></td>
+			    <td ><input type="text" name="p_name" class ="txtbx" placeholder="Patient Name" id="p_name" size="30"></td>
 	      	      </tr>
 
 		       <tr>
 		       		<td><label for="contactNum">Patient Mobile</label></td>
-		       		<td><input type="text" name="p_mobile" placeholder="Patient Mobile" id="p_mobile" size="30"></td>
+		       		<td><input class ="txtbx" type="text" name="p_mobile" placeholder="Patient Mobile" id="p_mobile" size="30"></td>
 		       </tr>
 
 		       <tr>
 		       		<td><label for="contactNum">Patient Adress</label></td>
-		       		<td><input type="text" name="p_address" placeholder="Patient Adress" id="p_address" size="30"></td>
+		       		<td><input class ="txtbx" type="text" name="p_address" placeholder="Patient Adress" id="p_address" size="30"></td>
 		       </tr>
 
 
 		       <tr>
 		       		<td><label for="contactNum">Disease</label></td>
-		       		<td><input type="text" name="disaese" placeholder="Disease" id="disaese" size="30"></td>
+		       		<td><input class ="txtbx" type="text" name="disaese" placeholder="Disease" id="disaese" size="30"></td>
 		       </tr>
 
 		       <tr>
 		       		<td><label for="typeNum">Prescription</label></td>
-		       		<td><input type="text" name="prescription" placeholder="Prescription" id="prescription" size="30"></td>
+		       		<td><input class ="txtbx" type="text" name="prescription" placeholder="Prescription" id="prescription" size="30"></td>
 		       </tr>
 
 	      	       <tr>
 				<td style="vertical-align: top;"><label for="addField">Data</label></td>
-				<td><textarea name="userData" placeholder="enter data here..." id="userData" rows="5" cols="30" placeholder="Enter Address"></textarea></td>
+				<td><textarea name="userData" class="textarea" placeholder="enter data here..." id="userData" rows="5" cols="30" placeholder="Enter Address"></textarea></td>
 	      		</tr>
 
 			<tr>
@@ -332,6 +445,56 @@ var name=document.getElementById("searchauto").value;
 					</form>
   </div>
 
+
+
+
+
+<div style="display:none" id="filter_div">
+
+	<i class="fa fa-times-circle" title="Close" aria-hidden="true" style="cursor:pointer;position:absolute;font-size:16px!important;right:0;color:#fff;padding:4px;top:0" 		
+			onclick="$('#filter_div').hide();$('#overlay_s').hide();$('#calender_div').hide();$('#custom_div').hide();$('#calender_div ul li.active').removeClass('active');"></i>
+
+	<div id="timeline"  class="edit_pop_heading">Search by Date/Disease</div>
+
+	<div style="padding:15px;">
+	
+		Filter : <span style="box-shadow:0 2px 2px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.08)
+;margin:0 10px 0 5px;position:relative;height: 38px;display: inline-block;"><i class="fa fa-search" aria-hidden="true" style="position: absolute;top: 11px;left:4px;color:#ccc"></i>
+<input id="searchauto" type="text" name="text" placeholder="Search by Disease..." style="padding: 0 5px 0 24px;border:0;height: 38px;font-size:14px">
+</span> 
+<span onclick="$('#calender_div').toggle();" style="background: #efefef;padding: 8px;box-shadow: 0 2px 2px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.08);cursor:pointer;display:inline-block;"><i class="fa fa-calendar" aria-hidden="true" style="color:#666;font-size:18px;" ></i> 12 June 2017 to 12 June 2017</span>
+
+		<div id="calender_div" style="width: 231px;margin-top: 10px;box-shadow: rgba(0, 0, 0, 0.16) 0px 2px 2px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;margin-left: 262px;display:none">
+			<i aria-hidden="true" id="note_arw" class="fa fa-sort-asc tparw" style="right: 121px;color: #aaa;font-size: 27px!important;margin-top: -11px;position: absolute;"></i>
+
+			<div style="background: #fff;padding:10px;border: 1px solid #ccc;display: flex;">	
+				<ul class="hdtbU hdtb-mn-o" aria-expanded="true" style="width:100%">
+					<li class="hdtbItm hdtbSel" id="qdr_" tabindex="0">Any time</li>
+					<li class="hdtbItm" id="qdr_h">Past hour</li>
+					<li class="hdtbItm" id="qdr_d">Past 24 hours</li>
+					<li class="hdtbItm" id="qdr_w">Past week</li>
+					<li class="hdtbItm" id="qdr_m">Past month</li>
+					<li class="hdtbItm" id="qdr_y">Past year</li>
+					<li class="hdtbItm" id="cdr_opt" onclick="$('#custom_div').toggle();">Custom range...</li>
+
+					<div id="custom_div" style="display: none;box-shadow: rgba(0, 0, 0, 0.16) 0px 2px 2px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;">
+						<span class="cst_date"><span style="width:50px;float:left;color:#666">From</span> 
+				
+						<input readonly="" name="Start_date" type="text" placeholder="Start Date" class="start_datepick customfrom start_datepick" style="background-image:url
+(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTYuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgd2lkdGg9IjUxMnB4IiBoZWlnaHQ9IjUxMnB4IiB2aWV3Qm94PSIwIDAgMzYuNDQ3IDM2LjQ0NyIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgMzYuNDQ3IDM2LjQ0NzsiIHhtbDpzcGFjZT0icHJlc2VydmUiPgo8Zz4KCTxnPgoJCTxwYXRoIGQ9Ik0zMC4yMjQsMy45NDhoLTEuMDk4VjIuNzVjMC0xLjUxNy0xLjE5Ny0yLjc1LTIuNjctMi43NWMtMS40NzQsMC0yLjY3LDEuMjMzLTIuNjcsMi43NXYxLjE5N2gtMi43NFYyLjc1ICAgIGMwLTEuNTE3LTEuMTk3LTIuNzUtMi42Ny0yLjc1Yy0xLjQ3MywwLTIuNjcsMS4yMzMtMi42NywyLjc1djEuMTk3aC0yLjc0VjIuNzVjMC0xLjUxNy0xLjE5Ny0yLjc1LTIuNjctMi43NSAgICBjLTEuNDczLDAtMi42NywxLjIzMy0yLjY3LDIuNzV2MS4xOTdINi4yMjRjLTIuMzQzLDAtNC4yNSwxLjkwNy00LjI1LDQuMjV2MjRjMCwyLjM0MywxLjkwNyw0LjI1LDQuMjUsNC4yNWgyNCAgICBjMi4zNDQsMCw0LjI1LTEuOTA3LDQuMjUtNC4yNXYtMjRDMzQuNDc0LDUuODU1LDMyLjU2NywzLjk0OCwzMC4yMjQsMy45NDh6IE0yNS4yODYsMi43NWMwLTAuNjg5LDAuNTI1LTEuMjUsMS4xNy0xLjI1ICAgIGMwLjY0NiwwLDEuMTcsMC41NjEsMS4xNywxLjI1djQuODk2YzAsMC42ODktMC41MjQsMS4yNS0xLjE3LDEuMjVjLTAuNjQ1LDAtMS4xNy0wLjU2MS0xLjE3LTEuMjVWMi43NXogTTE3LjIwNiwyLjc1ICAgIGMwLTAuNjg5LDAuNTI1LTEuMjUsMS4xNy0xLjI1czEuMTcsMC41NjEsMS4xNywxLjI1djQuODk2YzAsMC42ODktMC41MjUsMS4yNS0xLjE3LDEuMjVzLTEuMTctMC41NjEtMS4xNy0xLjI1VjIuNzV6IE05LjEyNSwyLjc1ICAgIGMwLTAuNjg5LDAuNTI1LTEuMjUsMS4xNy0xLjI1czEuMTcsMC41NjEsMS4xNywxLjI1djQuODk2YzAsMC42ODktMC41MjUsMS4yNS0xLjE3LDEuMjVzLTEuMTctMC41NjEtMS4xNy0xLjI1VjIuNzV6ICAgICBNMzEuOTc0LDMyLjE5OGMwLDAuOTY1LTAuNzg1LDEuNzUtMS43NSwxLjc1aC0yNGMtMC45NjUsMC0xLjc1LTAuNzg1LTEuNzUtMS43NXYtMjJoMjcuNVYzMi4xOTh6IiBmaWxsPSIjYzBjMGMwIi8+CgkJPHJlY3QgeD0iNi43MjQiIHk9IjE0LjYyNiIgd2lkdGg9IjQuNTk1IiBoZWlnaHQ9IjQuMDg5IiBmaWxsPSIjYzBjMGMwIi8+CgkJPHJlY3QgeD0iMTIuODU3IiB5PSIxNC42MjYiIHdpZHRoPSI0LjU5NiIgaGVpZ2h0PSI0LjA4OSIgZmlsbD0iI2MwYzBjMCIvPgoJCTxyZWN0IHg9IjE4Ljk5NSIgeT0iMTQuNjI2IiB3aWR0aD0iNC41OTUiIGhlaWdodD0iNC4wODkiIGZpbGw9IiNjMGMwYzAiLz4KCQk8cmVjdCB4PSIyNS4xMjgiIHk9IjE0LjYyNiIgd2lkdGg9IjQuNTk2IiBoZWlnaHQ9IjQuMDg5IiBmaWxsPSIjYzBjMGMwIi8+CgkJPHJlY3QgeD0iNi43MjQiIHk9IjIwLjA4NCIgd2lkdGg9IjQuNTk1IiBoZWlnaHQ9IjQuMDg2IiBmaWxsPSIjYzBjMGMwIi8+CgkJPHJlY3QgeD0iMTIuODU3IiB5PSIyMC4wODQiIHdpZHRoPSI0LjU5NiIgaGVpZ2h0PSI0LjA4NiIgZmlsbD0iI2MwYzBjMCIvPgoJCTxyZWN0IHg9IjE4Ljk5NSIgeT0iMjAuMDg0IiB3aWR0aD0iNC41OTUiIGhlaWdodD0iNC4wODYiIGZpbGw9IiNjMGMwYzAiLz4KCQk8cmVjdCB4PSIyNS4xMjgiIHk9IjIwLjA4NCIgd2lkdGg9IjQuNTk2IiBoZWlnaHQ9IjQuMDg2IiBmaWxsPSIjYzBjMGMwIi8+CgkJPHJlY3QgeD0iNi43MjQiIHk9IjI1LjU0IiB3aWR0aD0iNC41OTUiIGhlaWdodD0iNC4wODYiIGZpbGw9IiNjMGMwYzAiLz4KCQk8cmVjdCB4PSIxMi44NTciIHk9IjI1LjU0IiB3aWR0aD0iNC41OTYiIGhlaWdodD0iNC4wODYiIGZpbGw9IiNjMGMwYzAiLz4KCQk8cmVjdCB4PSIxOC45OTUiIHk9IjI1LjU0IiB3aWR0aD0iNC41OTUiIGhlaWdodD0iNC4wODYiIGZpbGw9IiNjMGMwYzAiLz4KCQk8cmVjdCB4PSIyNS4xMjgiIHk9IjI1LjU0IiB3aWR0aD0iNC41OTYiIGhlaWdodD0iNC4wODYiIGZpbGw9IiNjMGMwYzAiLz4KCTwvZz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8L3N2Zz4K);background-repeat: no-repeat;background-position: 102px 5px;height: 26px;background-size: 24px;cursor: pointer;width: 107px;background-size: 20px;"></span>
+	
+				<span class="cst_date"><span style="width:50px;float:left;color:#666">To</span> 
+					<input readonly="" name="Start_date" type="text" placeholder="Start Date" class="start_datepick customfrom end_datepick" style="background-image:url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTYuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgd2lkdGg9IjUxMnB4IiBoZWlnaHQ9IjUxMnB4IiB2aWV3Qm94PSIwIDAgMzYuNDQ3IDM2LjQ0NyIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgMzYuNDQ3IDM2LjQ0NzsiIHhtbDpzcGFjZT0icHJlc2VydmUiPgo8Zz4KCTxnPgoJCTxwYXRoIGQ9Ik0zMC4yMjQsMy45NDhoLTEuMDk4VjIuNzVjMC0xLjUxNy0xLjE5Ny0yLjc1LTIuNjctMi43NWMtMS40NzQsMC0yLjY3LDEuMjMzLTIuNjcsMi43NXYxLjE5N2gtMi43NFYyLjc1ICAgIGMwLTEuNTE3LTEuMTk3LTIuNzUtMi42Ny0yLjc1Yy0xLjQ3MywwLTIuNjcsMS4yMzMtMi42NywyLjc1djEuMTk3aC0yLjc0VjIuNzVjMC0xLjUxNy0xLjE5Ny0yLjc1LTIuNjctMi43NSAgICBjLTEuNDczLDAtMi42NywxLjIzMy0yLjY3LDIuNzV2MS4xOTdINi4yMjRjLTIuMzQzLDAtNC4yNSwxLjkwNy00LjI1LDQuMjV2MjRjMCwyLjM0MywxLjkwNyw0LjI1LDQuMjUsNC4yNWgyNCAgICBjMi4zNDQsMCw0LjI1LTEuOTA3LDQuMjUtNC4yNXYtMjRDMzQuNDc0LDUuODU1LDMyLjU2NywzLjk0OCwzMC4yMjQsMy45NDh6IE0yNS4yODYsMi43NWMwLTAuNjg5LDAuNTI1LTEuMjUsMS4xNy0xLjI1ICAgIGMwLjY0NiwwLDEuMTcsMC41NjEsMS4xNywxLjI1djQuODk2YzAsMC42ODktMC41MjQsMS4yNS0xLjE3LDEuMjVjLTAuNjQ1LDAtMS4xNy0wLjU2MS0xLjE3LTEuMjVWMi43NXogTTE3LjIwNiwyLjc1ICAgIGMwLTAuNjg5LDAuNTI1LTEuMjUsMS4xNy0xLjI1czEuMTcsMC41NjEsMS4xNywxLjI1djQuODk2YzAsMC42ODktMC41MjUsMS4yNS0xLjE3LDEuMjVzLTEuMTctMC41NjEtMS4xNy0xLjI1VjIuNzV6IE05LjEyNSwyLjc1ICAgIGMwLTAuNjg5LDAuNTI1LTEuMjUsMS4xNy0xLjI1czEuMTcsMC41NjEsMS4xNywxLjI1djQuODk2YzAsMC42ODktMC41MjUsMS4yNS0xLjE3LDEuMjVzLTEuMTctMC41NjEtMS4xNy0xLjI1VjIuNzV6ICAgICBNMzEuOTc0LDMyLjE5OGMwLDAuOTY1LTAuNzg1LDEuNzUtMS43NSwxLjc1aC0yNGMtMC45NjUsMC0xLjc1LTAuNzg1LTEuNzUtMS43NXYtMjJoMjcuNVYzMi4xOTh6IiBmaWxsPSIjYzBjMGMwIi8+CgkJPHJlY3QgeD0iNi43MjQiIHk9IjE0LjYyNiIgd2lkdGg9IjQuNTk1IiBoZWlnaHQ9IjQuMDg5IiBmaWxsPSIjYzBjMGMwIi8+CgkJPHJlY3QgeD0iMTIuODU3IiB5PSIxNC42MjYiIHdpZHRoPSI0LjU5NiIgaGVpZ2h0PSI0LjA4OSIgZmlsbD0iI2MwYzBjMCIvPgoJCTxyZWN0IHg9IjE4Ljk5NSIgeT0iMTQuNjI2IiB3aWR0aD0iNC41OTUiIGhlaWdodD0iNC4wODkiIGZpbGw9IiNjMGMwYzAiLz4KCQk8cmVjdCB4PSIyNS4xMjgiIHk9IjE0LjYyNiIgd2lkdGg9IjQuNTk2IiBoZWlnaHQ9IjQuMDg5IiBmaWxsPSIjYzBjMGMwIi8+CgkJPHJlY3QgeD0iNi43MjQiIHk9IjIwLjA4NCIgd2lkdGg9IjQuNTk1IiBoZWlnaHQ9IjQuMDg2IiBmaWxsPSIjYzBjMGMwIi8+CgkJPHJlY3QgeD0iMTIuODU3IiB5PSIyMC4wODQiIHdpZHRoPSI0LjU5NiIgaGVpZ2h0PSI0LjA4NiIgZmlsbD0iI2MwYzBjMCIvPgoJCTxyZWN0IHg9IjE4Ljk5NSIgeT0iMjAuMDg0IiB3aWR0aD0iNC41OTUiIGhlaWdodD0iNC4wODYiIGZpbGw9IiNjMGMwYzAiLz4KCQk8cmVjdCB4PSIyNS4xMjgiIHk9IjIwLjA4NCIgd2lkdGg9IjQuNTk2IiBoZWlnaHQ9IjQuMDg2IiBmaWxsPSIjYzBjMGMwIi8+CgkJPHJlY3QgeD0iNi43MjQiIHk9IjI1LjU0IiB3aWR0aD0iNC41OTUiIGhlaWdodD0iNC4wODYiIGZpbGw9IiNjMGMwYzAiLz4KCQk8cmVjdCB4PSIxMi44NTciIHk9IjI1LjU0IiB3aWR0aD0iNC41OTYiIGhlaWdodD0iNC4wODYiIGZpbGw9IiNjMGMwYzAiLz4KCQk8cmVjdCB4PSIxOC45OTUiIHk9IjI1LjU0IiB3aWR0aD0iNC41OTUiIGhlaWdodD0iNC4wODYiIGZpbGw9IiNjMGMwYzAiLz4KCQk8cmVjdCB4PSIyNS4xMjgiIHk9IjI1LjU0IiB3aWR0aD0iNC41OTYiIGhlaWdodD0iNC4wODYiIGZpbGw9IiNjMGMwYzAiLz4KCTwvZz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8L3N2Zz4K);background-repeat: no-repeat;background-position: 102px 5px;height: 26px;background-size: 24px;cursor: pointer;width: 107px;background-size: 20px;"></span>
+	
+	
+	<input class="saveb" type="button" onclick="addfolder();" value="Go" style="background: #00a699;border: none;color: #fff;padding: 7px 10px;border-radius:3px;">
+	</div>
+</ul>
+</div>
+</div>
+</div>
+</div>
+
 	<div class="container" style="min-height:843px;">  
 		<div class="tabs_add" id="ab_listing" >
 
@@ -340,15 +503,25 @@ var name=document.getElementById("searchauto").value;
 					<h4>Users list</h4>
 				</div>
 
+
+<span onclick="$('#filter_div').show();$('#overlay_s').show(); " style="float:left;margin-top:-45px;margin-left:206px;" title="Custom Search"><i class="fa fa-filter" aria-hidden="true" style="color:#2E3192;font-size: 28px;"></i>
+</span>
+<div class="overlay_s" id="overlay_s" style="display:none">
+</div>
+
+
+
 			<div class="addUser " onclick="addPatient();"><i class="fa fa-user-plus" id="step1" style="color:#00a699;font-size:33px;"></i>
 			</div>
+
+
 
 
 			<div class="filter">
 				<div class="filterLeft"><i class="fa fa-search" aria-hidden="true"></i></div>
 					<div class="filterSerch" style="position:relative" id="step2">
 						<i class="fa fa-search" aria-hidden="true" style="position: absolute;top: 12px;left: 9px;"></i>
-						<input id="searchauto" type="text" name="text" placeholder="Search by Name or Disease..." class="ui-autocomplete-input" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true">
+<input id="searchauto" type="text" name="text" placeholder="Search by Name or Disease..." class="ui-autocomplete-input" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true">
 						<input id="searchclick" type="hidden" name="searchclick" value="">
 					<div class="f2 srh_cross" style="cursor: pointer;" id="crosssearch" onclick="cross(10359580);"><i class="fa fa-times-circle" aria-hidden="true" 
 						style="font-size:15px">
@@ -366,7 +539,9 @@ var name=document.getElementById("searchauto").value;
 			</div>
 
 </div>
+
 		<div id="address_book_enq_detail" style="display: block; min-height: 843px;">
+
 			<div class="tabs-content" id="testing" style="">
 				<div tab-id="1" class="tab active">
 					<div class="rightTitle">DR Murali's data<a class="starUser">
@@ -387,47 +562,18 @@ var name=document.getElementById("searchauto").value;
 <!--bheri-->
 
 <div>
-	<table style="width:100%;" class="chattbl">
-		<tbody>
-			<tr><td calss="pat_name">Hari BHeri</td></tr>
-		</tbody>
-	</table>
-</div>
-
-<div>
-
-	<table style="width:100%;" class="chattbl">
-		<tbody>
-			<tr class="table-row bo_m2 cp" >   
-				<td class="td_sub">
-					<table class="chattbl_in">
-						<tbody>
-							<tr>
-								<td class="first_date">February 26, 2017</td>
-							</tr>
-							<tr>
-								<td class="td_sub">Came for Hairfall</td>
-							</tr> 
-						</tbody>
-					</table>
-				</td>  
-			</tr>
-		</tbody>
-	</table>
+<ul id="fetch_header"> 
+	</ul>	
 </div>
 
 <div>
 
 <div>
-
-<div class="tabs-header" id="left_ad_listng" onscroll="renderList();" style="height: 730px;"> 
-	<ul id="fetch_details"> 
-	</ul>
+	<div class="tabs-header" id="left_ad_listng" onscroll="renderList();" style="height: 730px;"> 
+		<ul id="fetch_details"> 
+		</ul>
+	</div>
 </div>
-
-</div>
-
-<!--bheri-->
 		</div>
 		</div>
 	</div>
