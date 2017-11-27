@@ -1,0 +1,10 @@
+sudo service apache2 status/stop/restart
+sudo apt-get remove apache2
+sudo apt-get purge apache2 apache2-utils apache2.2-bin apache2-common
+sudo apt autoremove
+whereis apache
+
+sudo rm -rf /usr/sbin/apache2 /usr/lib/apache2 /usr/share/man/man8/apache2.8.gz
+
+
+ apachectl configtest
