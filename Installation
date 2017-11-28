@@ -15,3 +15,6 @@ dubugging:
 cd /var/lib/dpkg/info
 
 for i in *; do sudo rm $i; done
+
+
+sudo apt-get install php-pgsql
