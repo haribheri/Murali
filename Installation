@@ -8,3 +8,10 @@ sudo rm -rf /usr/sbin/apache2 /usr/lib/apache2 /usr/share/man/man8/apache2.8.gz
 
 
  apachectl configtest
+
+
+dubugging:
+
+cd /var/lib/dpkg/info
+
+for i in *; do sudo rm $i; done
