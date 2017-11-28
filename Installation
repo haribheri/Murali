@@ -18,3 +18,5 @@ for i in *; do sudo rm $i; done
 
 
 sudo apt-get install php-pgsql
+
+libapache2-mod-php
